@@ -25,12 +25,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: main
           
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '16'
           
@@ -52,12 +52,25 @@ jobs:
             fs.mkdirSync(dataDir, { recursive: true });
           }
           
+          // Create a debug log file
+          const debugLogFile = path.join(dataDir, 'debug.log');
+          fs.writeFileSync(debugLogFile, `Debug log started at ${new Date().toISOString()}\n`);
+          
+          function logDebug(message) {
+            const timestamp = new Date().toISOString();
+            const logMessage = `[${timestamp}] ${message}\n`;
+            fs.appendFileSync(debugLogFile, logMessage);
+            console.log(message);
+          }
+          
           // Keywords to look for
           const keywords = [
             "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
             "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN",
             "2:30"
           ];
+          
+          logDebug(`Looking for keywords: ${keywords.join(', ')}`);
           
           // Function to extract which keywords are present in the content
           function findKeywords(content) {
@@ -67,6 +80,7 @@ jobs:
               const regex = new RegExp('\\b' + keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
               if (regex.test(content)) {
                 found.push(keyword);
+                logDebug(`Found keyword: ${keyword}`);
               }
             }
             return Array.from(new Set(found)); // Remove duplicates
@@ -79,15 +93,24 @@ jobs:
           if (fs.existsSync(previousKeywordsFile)) {
             try {
               previousKeywords = JSON.parse(fs.readFileSync(previousKeywordsFile, 'utf8'));
+              logDebug(`Loaded previous keywords: ${JSON.stringify(previousKeywords)}`);
             } catch (error) {
-              console.error('Error reading previous keywords:', error);
+              logDebug(`Error reading previous keywords: ${error.message}`);
               previousKeywords = [];
             }
+          } else {
+            logDebug('No previous keywords file found, starting fresh');
           }
           
           // Main function to check the website
           async function checkWebsite() {
+            logDebug('Starting website check');
+            
+            // Create dummy files to ensure we have something to commit
+            fs.writeFileSync(path.join(dataDir, 'last_check_time.txt'), new Date().toISOString());
+            
             // Launch browser with stealth mode
+            logDebug('Launching browser');
             const browser = await puppeteer.launch({
               headless: true,
               args: [
@@ -100,58 +123,72 @@ jobs:
             });
             
             try {
+              logDebug('Creating new page');
               const page = await browser.newPage();
               
               // Set a realistic viewport
               await page.setViewport({ width: 1280, height: 800 });
+              logDebug('Set viewport');
               
               // Set user agent to appear as a regular browser
               await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36');
+              logDebug('Set user agent');
               
               // Navigate to the website
-              console.log('Navigating to the website...');
+              logDebug(`Navigating to: ${process.env.WEBSITE_URL}`);
               await page.goto(process.env.WEBSITE_URL, {
                 waitUntil: 'networkidle2', // Wait until network is idle
                 timeout: 60000 // 60 seconds timeout
               });
+              logDebug('Page loaded');
               
               // Wait some extra time for Angular to render content
-              console.log('Waiting for content to load...');
+              logDebug('Waiting for content to render...');
               await page.waitForTimeout(10000); // 10 second additional wait
+              logDebug('Wait completed');
               
               // Extract page content
+              logDebug('Extracting page content');
               const content = await page.content();
+              logDebug(`Page content length: ${content.length} bytes`);
               
               // Save sample for debugging
               const sampleSize = Math.min(10000, content.length);
               fs.writeFileSync(path.join(dataDir, 'page_sample.txt'), content.substring(0, sampleSize));
-              console.log(`Saved first ${sampleSize} bytes of page content`);
+              logDebug(`Saved first ${sampleSize} bytes of page content`);
               
               // Extract visible text for better keyword detection
+              logDebug('Extracting visible text');
               const visibleText = await page.evaluate(() => {
                 return document.body.innerText;
               });
+              logDebug(`Visible text length: ${visibleText.length} bytes`);
               
               // Save visible text for debugging
               fs.writeFileSync(path.join(dataDir, 'visible_text.txt'), visibleText);
-              console.log('Saved visible text for debugging');
+              logDebug('Saved visible text for debugging');
               
               // Take screenshot for debugging
+              logDebug('Taking screenshot');
               await page.screenshot({ path: path.join(dataDir, 'screenshot.png'), fullPage: true });
-              console.log('Saved screenshot for debugging');
+              logDebug('Saved screenshot for debugging');
               
               // Find keywords
+              logDebug('Finding keywords in visible text');
               const currentKeywords = findKeywords(visibleText);
-              console.log('Keywords found:', currentKeywords);
+              logDebug(`Keywords found: ${JSON.stringify(currentKeywords)}`);
               
               // Save current keywords state
               fs.writeFileSync(previousKeywordsFile, JSON.stringify(currentKeywords, null, 2));
+              logDebug('Saved current keywords state');
               
               // Find newly appeared keywords
               const newKeywords = currentKeywords.filter(k => !previousKeywords.includes(k));
+              logDebug(`New keywords: ${JSON.stringify(newKeywords)}`);
               
               // Determine if we should send notification
               const shouldNotify = newKeywords.length > 0;
+              logDebug(`Should notify: ${shouldNotify}`);
               
               // Create notification message
               const notificationMessage = shouldNotify ? `Cages updated with ${newKeywords.join(', ')}` : '';
@@ -161,17 +198,20 @@ jobs:
               fs.appendFileSync(process.env.GITHUB_OUTPUT, `message=${notificationMessage}\n`);
               
               if (shouldNotify) {
-                console.log(`New slots available! Found: ${newKeywords.join(', ')}`);
+                logDebug(`New slots available! Found: ${newKeywords.join(', ')}`);
               } else {
-                console.log('No new slots detected');
+                logDebug('No new slots detected');
               }
               
             } catch (error) {
+              logDebug(`Error during website check: ${error.message}`);
               console.error('Error during website check:', error);
               fs.appendFileSync(process.env.GITHUB_OUTPUT, 'notify=false\n');
               fs.appendFileSync(process.env.GITHUB_OUTPUT, 'message=Error checking website\n');
             } finally {
+              logDebug('Closing browser');
               await browser.close();
+              logDebug('Browser closed');
             }
           }
           
@@ -184,7 +224,9 @@ jobs:
         env:
           WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
         run: |
+          echo "Starting website check..."
           node check_website.js
+          echo "Website check completed."
 
       - name: Send notification
         if: steps.check.outputs.notify == 'true'
@@ -200,10 +242,17 @@ jobs:
             --form-string "sound=siren" \
             https://api.pushover.net/1/messages.json
 
-      - name: Commit and push changes
+      - name: List files in data directory
+        run: |
+          echo "Files in data directory:"
+          ls -la data/
+          echo "Content of previous_keywords.json:"
+          cat data/previous_keywords.json || echo "File not found"
+
+      - name: Force commit all changes
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
-          git add data/
-          git commit -m "Update keywords state and debugging files" || echo "No changes to commit"
+          git add -A
+          git commit -m "Update keywords state and debugging files" --allow-empty
           git push
