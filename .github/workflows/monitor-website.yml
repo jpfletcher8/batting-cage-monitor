@@ -29,157 +29,155 @@ jobs:
         with:
           ref: main
           
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          python-version: '3.x'
-
+          node-version: '16'
+          
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install requests beautifulsoup4
+          npm init -y
+          npm install puppeteer
 
       - name: Check website for specific keywords
         id: check
         run: |
-          python - <<EOF
-          import requests
-          import os
-          import json
-          import re
-          import time
-          from bs4 import BeautifulSoup
+          node - <<EOF
+          const fs = require('fs');
+          const path = require('path');
+          const puppeteer = require('puppeteer');
           
-          # URL to monitor
-          url = "${{ secrets.WEBSITE_URL }}"
-          
-          # Create data directory if it doesn't exist
-          os.makedirs('data', exist_ok=True)
-          
-          # Keywords to look for
-          keywords = [
-              "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
-              "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN",
-              "2:30"
-          ]
-          
-          # Function to extract which keywords are present in the content
-          def find_keywords(content):
-              found = []
-              
-              # Parse HTML with BeautifulSoup
-              soup = BeautifulSoup(content, 'html.parser')
-              
-              # Extract visible text
-              text = soup.get_text()
-              
-              # Look for the specific structure based on the HTML provided
-              for keyword in keywords:
-                  # Check for generic matches in the text
-                  if re.search(r'\b' + re.escape(keyword) + r'\b', text):
-                      found.append(keyword)
-                  
-                  # Special handling for days of the week in the Angular structure
-                  if keyword in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]:
-                      # Look for day names in the specific format used in the HTML
-                      days = soup.find_all('b', class_='ng-binding')
-                      for day in days:
-                          day_text = day.get_text().strip()
-                          if keyword in day_text:
-                              found.append(keyword)
-                              break
-                  
-                  # Special handling for times like 2:30
-                  if re.match(r'\d+:\d+', keyword):
-                      # Look for times in the list-title elements
-                      times = soup.find_all('div', class_='list-title ng-binding')
-                      for time in times:
-                          time_text = time.get_text().strip()
-                          # Need to account for am/pm format
-                          time_match = re.search(r'(\d+:\d+)', time_text)
-                          if time_match and time_match.group(1) == keyword:
-                              found.append(keyword)
-                              break
-              
-              # Remove duplicates
-              return list(set(found))
-          
-          # Get previous keywords state
-          previous_keywords_file = "data/previous_keywords.json"
-          previous_keywords = []
-          
-          if os.path.exists(previous_keywords_file):
-              with open(previous_keywords_file, "r") as f:
-                  try:
-                      previous_keywords = json.load(f)
-                  except json.JSONDecodeError:
-                      previous_keywords = []
-          
-          # Get current page content - retry up to 3 times if needed
-          headers = {
-              "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1"
+          // Create data directory if it doesn't exist
+          const dataDir = path.join(process.cwd(), 'data');
+          if (!fs.existsSync(dataDir)) {
+            fs.mkdirSync(dataDir, { recursive: true });
           }
           
-          max_retries = 3
-          retry_delay = 5  # seconds
+          // Keywords to look for
+          const keywords = [
+            "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
+            "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN",
+            "2:30"
+          ];
           
-          for attempt in range(max_retries):
-              try:
-                  print(f"Attempt {attempt+1}: Fetching URL {url}")
-                  response = requests.get(url, headers=headers)
-                  response.raise_for_status()  # Raise exception for 4XX/5XX responses
-                  
-                  # Find keywords in current content
-                  current_content = response.text
-                  print(f"Page content retrieved, size: {len(current_content)} bytes")
-                  
-                  # Save a sample of the content for debugging
-                  with open("data/page_sample.txt", "w") as f:
-                      sample_size = min(5000, len(current_content))
-                      f.write(current_content[:sample_size])
-                  print(f"Saved first {sample_size} bytes of page content to data/page_sample.txt")
-                  
-                  # Find keywords
-                  current_keywords = find_keywords(current_content)
-                  print(f"Keywords found: {current_keywords}")
-                  
-                  # Save current keywords state
-                  with open(previous_keywords_file, "w") as f:
-                      json.dump(current_keywords, f)
-                  
-                  # Find newly appeared keywords (ones in current but not in previous)
-                  new_keywords = [k for k in current_keywords if k not in previous_keywords]
-                  
-                  # Determine if we should send notification
-                  should_notify = len(new_keywords) > 0
-                  
-                  # Create notification message
-                  notification_message = "Cages updated with " + ", ".join(new_keywords) if new_keywords else ""
-                  
-                  # Set outputs for next steps
-                  with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-                      f.write(f"notify={'true' if should_notify else 'false'}\n")
-                      f.write(f"message={notification_message}\n")
-                  
-                  if should_notify:
-                      print(f"New slots available! Found: {', '.join(new_keywords)}")
-                  else:
-                      print("No new slots detected")
-                  
-                  # If we got here, we succeeded, so break out of retry loop
-                  break
-                      
-              except Exception as e:
-                  print(f"Error checking website (attempt {attempt+1}/{max_retries}): {str(e)}")
-                  if attempt < max_retries - 1:
-                      print(f"Waiting {retry_delay} seconds before retrying...")
-                      time.sleep(retry_delay)
-                  else:
-                      # All retries failed
-                      print("All attempts failed. Not updating previous_keywords.")
-                      with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-                          f.write("notify=false\n")
-                          f.write("message=Error checking website\n")
+          // Function to extract which keywords are present in the content
+          function findKeywords(content) {
+            const found = [];
+            for (const keyword of keywords) {
+              // Use word boundary regex for exact matches
+              const regex = new RegExp('\\b' + keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b');
+              if (regex.test(content)) {
+                found.push(keyword);
+              }
+            }
+            return Array.from(new Set(found)); // Remove duplicates
+          }
+          
+          // Get previous keywords state
+          const previousKeywordsFile = path.join(dataDir, 'previous_keywords.json');
+          let previousKeywords = [];
+          
+          if (fs.existsSync(previousKeywordsFile)) {
+            try {
+              previousKeywords = JSON.parse(fs.readFileSync(previousKeywordsFile, 'utf8'));
+            } catch (error) {
+              console.error('Error reading previous keywords:', error);
+              previousKeywords = [];
+            }
+          }
+          
+          // Main function to check the website
+          async function checkWebsite() {
+            // Launch browser with stealth mode
+            const browser = await puppeteer.launch({
+              headless: true,
+              args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-accelerated-2d-canvas',
+                '--disable-gpu'
+              ]
+            });
+            
+            try {
+              const page = await browser.newPage();
+              
+              // Set a realistic viewport
+              await page.setViewport({ width: 1280, height: 800 });
+              
+              // Set user agent to appear as a regular browser
+              await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36');
+              
+              // Navigate to the website
+              console.log('Navigating to the website...');
+              await page.goto('${process.env.WEBSITE_URL}', {
+                waitUntil: 'networkidle2', // Wait until network is idle
+                timeout: 60000 // 60 seconds timeout
+              });
+              
+              // Wait some extra time for Angular to render content
+              console.log('Waiting for content to load...');
+              await page.waitForTimeout(10000); // 10 second additional wait
+              
+              // Extract page content
+              const content = await page.content();
+              
+              // Save sample for debugging
+              const sampleSize = Math.min(10000, content.length);
+              fs.writeFileSync(path.join(dataDir, 'page_sample.txt'), content.substring(0, sampleSize));
+              console.log(`Saved first ${sampleSize} bytes of page content`);
+              
+              // Extract visible text for better keyword detection
+              const visibleText = await page.evaluate(() => {
+                return document.body.innerText;
+              });
+              
+              // Save visible text for debugging
+              fs.writeFileSync(path.join(dataDir, 'visible_text.txt'), visibleText);
+              console.log('Saved visible text for debugging');
+              
+              // Take screenshot for debugging
+              await page.screenshot({ path: path.join(dataDir, 'screenshot.png'), fullPage: true });
+              console.log('Saved screenshot for debugging');
+              
+              // Find keywords
+              const currentKeywords = findKeywords(visibleText);
+              console.log('Keywords found:', currentKeywords);
+              
+              // Save current keywords state
+              fs.writeFileSync(previousKeywordsFile, JSON.stringify(currentKeywords, null, 2));
+              
+              // Find newly appeared keywords
+              const newKeywords = currentKeywords.filter(k => !previousKeywords.includes(k));
+              
+              // Determine if we should send notification
+              const shouldNotify = newKeywords.length > 0;
+              
+              // Create notification message
+              const notificationMessage = shouldNotify ? `Cages updated with ${newKeywords.join(', ')}` : '';
+              
+              // Set outputs for next steps
+              fs.appendFileSync(process.env.GITHUB_OUTPUT, `notify=${shouldNotify ? 'true' : 'false'}\n`);
+              fs.appendFileSync(process.env.GITHUB_OUTPUT, `message=${notificationMessage}\n`);
+              
+              if (shouldNotify) {
+                console.log(`New slots available! Found: ${newKeywords.join(', ')}`);
+              } else {
+                console.log('No new slots detected');
+              }
+              
+            } catch (error) {
+              console.error('Error during website check:', error);
+              fs.appendFileSync(process.env.GITHUB_OUTPUT, 'notify=false\n');
+              fs.appendFileSync(process.env.GITHUB_OUTPUT, 'message=Error checking website\n');
+            } finally {
+              await browser.close();
+            }
+          }
+          
+          // Run the check
+          checkWebsite();
           EOF
 
       - name: Send notification
@@ -201,5 +199,5 @@ jobs:
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
           git add data/
-          git commit -m "Update keywords state and add page sample" || echo "No changes to commit"
+          git commit -m "Update keywords state and debugging files" || echo "No changes to commit"
           git push
