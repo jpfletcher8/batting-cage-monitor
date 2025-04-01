@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/jpfletcher8/batting-cage-monitor#readme",
   "dependencies": {
-    "puppeteer": "^24.4.0"
+    "puppeteer": "^19.7.5"
   }
 }

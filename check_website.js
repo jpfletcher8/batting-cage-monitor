@@ -58,6 +58,13 @@ if (fs.existsSync(previousKeywordsFile)) {
   logDebug('No previous keywords file found, starting fresh');
 }
 
+// Helper function for delay
+function delay(time) {
+  return new Promise(function(resolve) { 
+    setTimeout(resolve, time);
+  });
+}
+
 // Main function to check the website
 async function checkWebsite() {
   logDebug('Starting website check');
@@ -90,6 +97,9 @@ async function checkWebsite() {
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36');
     logDebug('Set user agent');
     
+    // Enable console logs from the page
+    page.on('console', msg => logDebug(`Browser console: ${msg.text()}`));
+    
     // Navigate to the website
     logDebug(`Navigating to: ${process.env.WEBSITE_URL}`);
     await page.goto(process.env.WEBSITE_URL, {
@@ -100,13 +110,24 @@ async function checkWebsite() {
     
     // Wait some extra time for Angular to render content
     logDebug('Waiting for content to render...');
-    await page.waitForTimeout(10000); // 10 second additional wait
+    await delay(10000); // 10 second additional wait using our custom delay function
     logDebug('Wait completed');
+    
+    // Try to interact with the page to trigger any lazy-loaded content
+    logDebug('Scrolling page to trigger dynamic content');
+    await page.evaluate(() => {
+      window.scrollBy(0, window.innerHeight);
+    });
+    await delay(5000); // Wait a bit more after scrolling
     
     // Extract page content
     logDebug('Extracting page content');
     const content = await page.content();
     logDebug(`Page content length: ${content.length} bytes`);
+    
+    // Save full page content for debugging (let's check what we're actually getting)
+    fs.writeFileSync(path.join(dataDir, 'full_page.html'), content);
+    logDebug('Saved full page HTML');
     
     // Save sample for debugging
     const sampleSize = Math.min(10000, content.length);
