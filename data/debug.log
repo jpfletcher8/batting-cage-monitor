@@ -1,0 +1,14 @@
+Debug log started at 2025-04-01T07:03:30.897Z
+[2025-04-01T07:03:30.897Z] Looking for keywords: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday, MON, TUE, WED, THU, FRI, SAT, SUN, 2:30
+[2025-04-01T07:03:30.898Z] Loaded previous keywords: []
+[2025-04-01T07:03:30.899Z] Starting website check
+[2025-04-01T07:03:30.899Z] Launching browser
+[2025-04-01T07:03:31.333Z] Creating new page
+[2025-04-01T07:03:31.374Z] Set viewport
+[2025-04-01T07:03:31.375Z] Set user agent
+[2025-04-01T07:03:31.375Z] Navigating to: https://app.glofox.com/portal/#/branch/637e9067f46bc40c39009df4/facilities/66049d5414c864a94a04ba6a/timeslots
+[2025-04-01T07:03:33.795Z] Page loaded
+[2025-04-01T07:03:33.795Z] Waiting for content to render...
+[2025-04-01T07:03:33.795Z] Error during website check: page.waitForTimeout is not a function
+[2025-04-01T07:03:33.797Z] Closing browser
+[2025-04-01T07:03:33.875Z] Browser closed

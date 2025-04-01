@@ -1,0 +1,23 @@
+{
+  "name": "batting-cage-monitor",
+  "version": "1.0.0",
+  "description": "Checks on the local batting cage timeslots that don't get updated at a consistent time",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpfletcher8/batting-cage-monitor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jpfletcher8/batting-cage-monitor/issues"
+  },
+  "homepage": "https://github.com/jpfletcher8/batting-cage-monitor#readme",
+  "dependencies": {
+    "puppeteer": "^24.4.0"
+  }
+}
