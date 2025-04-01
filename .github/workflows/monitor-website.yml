@@ -1,0 +1,144 @@
+name: Monitor Batting Cage Website
+
+on:
+  schedule:
+    # Runs every 15 minutes during active hours (7am-9pm Pacific time)
+    # These are in UTC time (Pacific time +7/8 hours depending on DST)
+    # During standard time (Nov-Mar): Pacific is UTC-8, so 7am PT = 15:00 UTC, 9pm PT = 05:00 UTC
+    # During daylight time (Mar-Nov): Pacific is UTC-7, so 7am PT = 14:00 UTC, 9pm PT = 04:00 UTC
+    
+    # Standard time hours (15:00-05:00 UTC, which is 7am-9pm Pacific Standard Time)
+    - cron: '*/15 15-23 * 11,12,1,2,3 *' # 15:00-23:59 UTC (Nov-Mar)
+    - cron: '*/15 0-5 * 11,12,1,2,3 *'   # 00:00-05:00 UTC (Nov-Mar)
+    
+    # Daylight saving time hours (14:00-04:00 UTC, which is 7am-9pm Pacific Daylight Time)
+    - cron: '*/15 14-23 * 3,4,5,6,7,8,9,10 *' # 14:00-23:59 UTC (Mar-Oct)
+    - cron: '*/15 0-4 * 3,4,5,6,7,8,9,10 *'   # 00:00-04:00 UTC (Mar-Oct)
+  
+  workflow_dispatch:  # Allows manual triggering for testing
+
+jobs:
+  check_website:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: main
+          
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Check website for specific keywords
+        id: check
+        run: |
+          python - <<EOF
+          import requests
+          import os
+          import json
+          import re
+          
+          # URL to monitor
+          url = "${{ secrets.WEBSITE_URL }}"
+          
+          # Create data directory if it doesn't exist
+          os.makedirs('data', exist_ok=True)
+          
+          # Keywords to look for
+          keywords = [
+              "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
+              "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN",
+              "2:30"
+          ]
+          
+          # Function to extract which keywords are present in the content
+          def find_keywords(content):
+              found = []
+              for keyword in keywords:
+                  if re.search(r'\b' + re.escape(keyword) + r'\b', content):
+                      found.append(keyword)
+              return found
+          
+          # Get previous keywords state
+          previous_keywords_file = "data/previous_keywords.json"
+          previous_keywords = []
+          
+          if os.path.exists(previous_keywords_file):
+              with open(previous_keywords_file, "r") as f:
+                  try:
+                      previous_keywords = json.load(f)
+                  except json.JSONDecodeError:
+                      previous_keywords = []
+          
+          # Get current page content
+          headers = {
+              "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1"
+          }
+          
+          try:
+              response = requests.get(url, headers=headers)
+              response.raise_for_status()  # Raise exception for 4XX/5XX responses
+              
+              # Find keywords in current content
+              current_content = response.text
+              current_keywords = find_keywords(current_content)
+              
+              # Save current keywords state
+              with open(previous_keywords_file, "w") as f:
+                  json.dump(current_keywords, f)
+              
+              # Find newly appeared keywords (ones in current but not in previous)
+              new_keywords = [k for k in current_keywords if k not in previous_keywords]
+              
+              # Determine if we should send notification
+              should_notify = len(new_keywords) > 0
+              
+              # Create notification message
+              notification_message = "Cages updated with " + ", ".join(new_keywords) if new_keywords else ""
+              
+              # Set outputs for next steps
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                  f.write(f"notify={'true' if should_notify else 'false'}\n")
+                  f.write(f"message={notification_message}\n")
+              
+              if should_notify:
+                  print(f"New slots available! Found: {', '.join(new_keywords)}")
+              else:
+                  print("No new slots detected")
+                  
+          except Exception as e:
+              print(f"Error checking website: {str(e)}")
+              # Don't update previous_keywords if there was an error
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                  f.write("notify=false\n")
+                  f.write("message=Error checking website\n")
+          EOF
+
+      - name: Send notification
+        if: steps.check.outputs.notify == 'true'
+        run: |
+          curl -s \
+            --form-string "token=${{ secrets.PUSHOVER_TOKEN }}" \
+            --form-string "user=${{ secrets.PUSHOVER_USER }}" \
+            --form-string "message=${{ steps.check.outputs.message }}" \
+            --form-string "title=Batting Cage Alert!" \
+            --form-string "url=${{ secrets.WEBSITE_URL }}" \
+            --form-string "url_title=Go to Reservation Page" \
+            --form-string "priority=1" \
+            --form-string "sound=siren" \
+            https://api.pushover.net/1/messages.json
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add data/previous_keywords.json
+          git commit -m "Update keywords state" || echo "No changes to commit"
+          git push
