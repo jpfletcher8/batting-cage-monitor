@@ -1,115 +1,115 @@
-Debug log started at 2025-04-01T07:09:44.028Z
-[2025-04-01T07:09:44.029Z] Looking for keywords: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday, MON, TUE, WED, THU, FRI, SAT, SUN, 2:30
-[2025-04-01T07:09:44.030Z] Loaded previous keywords: []
-[2025-04-01T07:09:44.030Z] Starting website check
-[2025-04-01T07:09:44.030Z] Launching browser
-[2025-04-01T07:09:49.657Z] Creating new page
-[2025-04-01T07:09:49.697Z] Set viewport
-[2025-04-01T07:09:49.699Z] Set user agent
-[2025-04-01T07:09:49.699Z] Navigating to: https://app.glofox.com/portal/#/branch/637e9067f46bc40c39009df4/facilities/66049d5414c864a94a04ba6a/timeslots
-[2025-04-01T07:09:50.150Z] Browser console: %cLoading app.js background: #242424; color: #FF5733;
-[2025-04-01T07:09:50.151Z] Browser console: %cLoading run-block.js background: #242424; color: #FF5733;
-[2025-04-01T07:09:50.151Z] Browser console: %cLoading constants.js background: #242424; color: #FF5733;
-[2025-04-01T07:09:50.151Z] Browser console: %cLoading api.js background: #242424; color: #FF5733;
-[2025-04-01T07:09:50.151Z] Browser console: %cLoading ab.js background: #242424; color: #FF5733;
-[2025-04-01T07:09:50.152Z] Browser console: %cLoading jwt-config.js background: #242424; color: #FF5733;
-[2025-04-01T07:09:50.152Z] Browser console: %cLoading ui-router-config.js background: #242424; color: #FF5733;
-[2025-04-01T07:09:50.152Z] Browser console: %cLoading translate-config.js background: #242424; color: #FF5733;
-[2025-04-01T07:09:50.153Z] Browser console: %cLoading device-detector.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.153Z] Browser console: %cLoading analytics.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.153Z] Browser console: %cLoading analytics.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.153Z] Browser console: %cLoading helper.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.153Z] Browser console: %cLoading authentication.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.154Z] Browser console: %cLoading feature-flags.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.154Z] Browser console: %cLoading settings.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.154Z] Browser console: %cLoading branch.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.155Z] Browser console: %cLoading user.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.156Z] Browser console: %cLoading program.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.156Z] Browser console: %cLoading class.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.156Z] Browser console: %cLoading event.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.156Z] Browser console: %cLoading course.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.156Z] Browser console: %cLoading facility.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.157Z] Browser console: %cLoading membership.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.157Z] Browser console: %cLoading scrolling.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.157Z] Browser console: %cLoading tax.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.157Z] Browser console: %cLoading trainer.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.157Z] Browser console: %cLoading appointment.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.157Z] Browser console: %cLoading booking.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.157Z] Browser console: %cLoading price-breakdown.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.157Z] Browser console: %cLoading document.service.js background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.158Z] Browser console: %cLoading glofox-request-interceptor.factory.js background: #242424; color: #00FFFF;
-[2025-04-01T07:09:50.158Z] Browser console: %cLoading glofox-request-config.js background: #242424; color: #00FFFF;
-[2025-04-01T07:09:50.159Z] Browser console: %cLoading loader.directive.js background: #242424; color: #815C0C;
-[2025-04-01T07:09:50.159Z] Browser console: %cLoading main-header.directive.js background: #242424; color: #815C0C;
-[2025-04-01T07:09:50.159Z] Browser console: %cLoading main-filter.directive.js background: #242424; color: #815C0C;
-[2025-04-01T07:09:50.159Z] Browser console: %cLoading footer.directive.js background: #242424; color: #815C0C;
-[2025-04-01T07:09:50.159Z] Browser console: %cLoading master.directive.js background: #242424; color: #815C0C;
-[2025-04-01T07:09:50.159Z] Browser console: %cLoading classes.js background: #242424; color: #368BC1;
-[2025-04-01T07:09:50.160Z] Browser console: %cLoading classes-list-view.js background: #242424; color: #368BC1;
-[2025-04-01T07:09:50.160Z] Browser console: %cLoading classes-week-view.js background: #242424; color: #368BC1;
-[2025-04-01T07:09:50.161Z] Browser console: %cLoading courses.js background: #242424; color: #368BC1;
-[2025-04-01T07:09:50.161Z] Browser console: %cLoading memberships.js background: #242424; color: #368BC1;
-[2025-04-01T07:09:50.161Z] Browser console: %cLoading trainers.js background: #242424; color: #368BC1;
-[2025-04-01T07:09:50.161Z] Browser console: %cLoading trainer.js background: #242424; color: #368BC1;
-[2025-04-01T07:09:50.161Z] Browser console: %cLoading facilities.js background: #242424; color: #368BC1;
-[2025-04-01T07:09:50.161Z] Browser console: %cLoading facility.js background: #242424; color: #368BC1;
-[2025-04-01T07:09:50.161Z] Browser console: %cLoading login-register.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.161Z] Browser console: %cLoading register-child-account.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.162Z] Browser console: %cLoading profile.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.162Z] Browser console: %cLoading forgot-password.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.162Z] Browser console: %cLoading general-dialog.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.162Z] Browser console: %cLoading marketing-dialog.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.162Z] Browser console: %cLoading change-password.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.162Z] Browser console: %cLoading book-event.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.162Z] Browser console: %cLoading book-appointment.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.163Z] Browser console: %cLoading payment-collector.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.163Z] Browser console: %cLoading custom-waiver-terms.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.163Z] Browser console: %cLoading sms=consent-waiver-terms.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.163Z] Browser console: %cLoading membership-purchase-terms.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.163Z] Browser console: %cLoading payg-payment-terms.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.164Z] Browser console: %cLoading guardian-waiver-terms.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.164Z] Browser console: %cLoading go-payg.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.164Z] Browser console: %cLoading select-payment-method-on-boarding-dialog.js background: #242424; color: #FFFF00;
-[2025-04-01T07:09:50.164Z] Browser console: %cLoading lead-card.js background: #242424; color: #E8002A;
-[2025-04-01T07:09:50.164Z] Browser console: %cLoading lead-data-collector.js background: #242424; color: #E8002A;
-[2025-04-01T07:09:50.165Z] Browser console: %cLoading lead-profile.js background: #242424; color: #E8002A;
-[2025-04-01T07:09:50.165Z] Browser console: %cLoading lead-register.js background: #242424; color: #E8002A;
-[2025-04-01T07:09:50.165Z] Browser console: %cLoading lead-create-child-account.js background: #242424; color: #E8002A;
-[2025-04-01T07:09:50.165Z] Browser console: %cLoading lead-success.js background: #242424; color: #E8002A;
-[2025-04-01T07:09:50.165Z] Browser console: %cLoading lead-data-collector-success.js background: #242424; color: #E8002A;
-[2025-04-01T07:09:50.255Z] Browser console: %cProject version: 0cef1a62e2b7514952cee477b3592714ac37cd7d background: #242424; color: #39FF33;
-[2025-04-01T07:09:50.255Z] Browser console: %cInitializing Web Portal authentication background: #242424; color: #EC00FF;
-[2025-04-01T07:09:50.256Z] Browser console: %cSetting Web Portal configurations background: #242424; color: #EC00FF;
-[2025-04-01T07:09:51.122Z] Browser console: Failed to load resource: the server responded with a status of 404 ()
-[2025-04-01T07:09:51.135Z] Browser console: Failed to load resource: the server responded with a status of 404 ()
-[2025-04-01T07:09:51.490Z] Browser console: Failed to load resource: the server responded with a status of 403 ()
-[2025-04-01T07:09:51.495Z] Browser console: Failed to load resource: the server responded with a status of 403 ()
-[2025-04-01T07:09:51.572Z] Browser console: Failed to load resource: the server responded with a status of 403 ()
-[2025-04-01T07:09:51.577Z] Browser console: Failed to load resource: the server responded with a status of 403 ()
-[2025-04-01T07:09:51.580Z] Browser console: Failed to load resource: the server responded with a status of 403 ()
-[2025-04-01T07:09:51.655Z] Browser console: Failed to load resource: the server responded with a status of 403 ()
-[2025-04-01T07:09:51.732Z] Browser console: Failed to load resource: the server responded with a status of 403 ()
-[2025-04-01T07:09:52.215Z] Page loaded
-[2025-04-01T07:09:52.216Z] Waiting for content to render...
-[2025-04-01T07:10:02.218Z] Wait completed
-[2025-04-01T07:10:02.219Z] Scrolling page to trigger dynamic content
-[2025-04-01T07:10:07.226Z] Extracting page content
-[2025-04-01T07:10:07.242Z] Page content length: 495495 bytes
-[2025-04-01T07:10:07.243Z] Saved full page HTML
-[2025-04-01T07:10:07.243Z] Saved first 10000 bytes of page content
-[2025-04-01T07:10:07.244Z] Extracting visible text
-[2025-04-01T07:10:07.245Z] Visible text length: 612 bytes
-[2025-04-01T07:10:07.245Z] Saved visible text for debugging
-[2025-04-01T07:10:07.245Z] Taking screenshot
-[2025-04-01T07:10:07.390Z] Saved screenshot for debugging
-[2025-04-01T07:10:07.390Z] Finding keywords in visible text
-[2025-04-01T07:10:07.391Z] Found keyword: Saturday
-[2025-04-01T07:10:07.391Z] Found keyword: Sunday
-[2025-04-01T07:10:07.391Z] Found keyword: 2:30
-[2025-04-01T07:10:07.391Z] Keywords found: ["Saturday","Sunday","2:30"]
-[2025-04-01T07:10:07.391Z] Saved current keywords state
-[2025-04-01T07:10:07.391Z] New keywords: ["Saturday","Sunday","2:30"]
-[2025-04-01T07:10:07.391Z] Should notify: true
-[2025-04-01T07:10:07.392Z] New slots available! Found: Saturday, Sunday, 2:30
-[2025-04-01T07:10:07.392Z] Closing browser
-[2025-04-01T07:10:07.413Z] Browser closed
+Debug log started at 2025-04-01T07:49:42.370Z
+[2025-04-01T07:49:42.370Z] Looking for keywords: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday, MON, TUE, WED, THU, FRI, SAT, SUN, 2:30
+[2025-04-01T07:49:42.371Z] Loaded previous keywords: []
+[2025-04-01T07:49:42.371Z] Starting website check
+[2025-04-01T07:49:42.372Z] Launching browser
+[2025-04-01T07:49:42.783Z] Creating new page
+[2025-04-01T07:49:42.825Z] Set viewport
+[2025-04-01T07:49:42.827Z] Set user agent
+[2025-04-01T07:49:42.827Z] Navigating to: https://app.glofox.com/portal/#/branch/637e9067f46bc40c39009df4/facilities/66049d5414c864a94a04ba6a/timeslots
+[2025-04-01T07:49:43.189Z] Browser console: %cLoading app.js background: #242424; color: #FF5733;
+[2025-04-01T07:49:43.190Z] Browser console: %cLoading run-block.js background: #242424; color: #FF5733;
+[2025-04-01T07:49:43.190Z] Browser console: %cLoading constants.js background: #242424; color: #FF5733;
+[2025-04-01T07:49:43.190Z] Browser console: %cLoading api.js background: #242424; color: #FF5733;
+[2025-04-01T07:49:43.190Z] Browser console: %cLoading ab.js background: #242424; color: #FF5733;
+[2025-04-01T07:49:43.190Z] Browser console: %cLoading jwt-config.js background: #242424; color: #FF5733;
+[2025-04-01T07:49:43.191Z] Browser console: %cLoading ui-router-config.js background: #242424; color: #FF5733;
+[2025-04-01T07:49:43.191Z] Browser console: %cLoading translate-config.js background: #242424; color: #FF5733;
+[2025-04-01T07:49:43.191Z] Browser console: %cLoading device-detector.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.191Z] Browser console: %cLoading analytics.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.192Z] Browser console: %cLoading analytics.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.192Z] Browser console: %cLoading helper.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.192Z] Browser console: %cLoading authentication.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.192Z] Browser console: %cLoading feature-flags.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.192Z] Browser console: %cLoading settings.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.193Z] Browser console: %cLoading branch.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.193Z] Browser console: %cLoading user.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.193Z] Browser console: %cLoading program.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.194Z] Browser console: %cLoading class.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.194Z] Browser console: %cLoading event.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.195Z] Browser console: %cLoading course.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.195Z] Browser console: %cLoading facility.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.196Z] Browser console: %cLoading membership.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.196Z] Browser console: %cLoading scrolling.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.196Z] Browser console: %cLoading tax.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.196Z] Browser console: %cLoading trainer.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.196Z] Browser console: %cLoading appointment.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.196Z] Browser console: %cLoading booking.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.196Z] Browser console: %cLoading price-breakdown.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.197Z] Browser console: %cLoading document.service.js background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.197Z] Browser console: %cLoading glofox-request-interceptor.factory.js background: #242424; color: #00FFFF;
+[2025-04-01T07:49:43.197Z] Browser console: %cLoading glofox-request-config.js background: #242424; color: #00FFFF;
+[2025-04-01T07:49:43.197Z] Browser console: %cLoading loader.directive.js background: #242424; color: #815C0C;
+[2025-04-01T07:49:43.197Z] Browser console: %cLoading main-header.directive.js background: #242424; color: #815C0C;
+[2025-04-01T07:49:43.197Z] Browser console: %cLoading main-filter.directive.js background: #242424; color: #815C0C;
+[2025-04-01T07:49:43.197Z] Browser console: %cLoading footer.directive.js background: #242424; color: #815C0C;
+[2025-04-01T07:49:43.198Z] Browser console: %cLoading master.directive.js background: #242424; color: #815C0C;
+[2025-04-01T07:49:43.198Z] Browser console: %cLoading classes.js background: #242424; color: #368BC1;
+[2025-04-01T07:49:43.198Z] Browser console: %cLoading classes-list-view.js background: #242424; color: #368BC1;
+[2025-04-01T07:49:43.198Z] Browser console: %cLoading classes-week-view.js background: #242424; color: #368BC1;
+[2025-04-01T07:49:43.198Z] Browser console: %cLoading courses.js background: #242424; color: #368BC1;
+[2025-04-01T07:49:43.198Z] Browser console: %cLoading memberships.js background: #242424; color: #368BC1;
+[2025-04-01T07:49:43.198Z] Browser console: %cLoading trainers.js background: #242424; color: #368BC1;
+[2025-04-01T07:49:43.199Z] Browser console: %cLoading trainer.js background: #242424; color: #368BC1;
+[2025-04-01T07:49:43.199Z] Browser console: %cLoading facilities.js background: #242424; color: #368BC1;
+[2025-04-01T07:49:43.199Z] Browser console: %cLoading facility.js background: #242424; color: #368BC1;
+[2025-04-01T07:49:43.199Z] Browser console: %cLoading login-register.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.200Z] Browser console: %cLoading register-child-account.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.200Z] Browser console: %cLoading profile.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.201Z] Browser console: %cLoading forgot-password.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.201Z] Browser console: %cLoading general-dialog.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.201Z] Browser console: %cLoading marketing-dialog.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.201Z] Browser console: %cLoading change-password.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.202Z] Browser console: %cLoading book-event.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.202Z] Browser console: %cLoading book-appointment.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.203Z] Browser console: %cLoading payment-collector.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.203Z] Browser console: %cLoading custom-waiver-terms.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.203Z] Browser console: %cLoading sms=consent-waiver-terms.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.203Z] Browser console: %cLoading membership-purchase-terms.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.204Z] Browser console: %cLoading payg-payment-terms.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.204Z] Browser console: %cLoading guardian-waiver-terms.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.204Z] Browser console: %cLoading go-payg.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.204Z] Browser console: %cLoading select-payment-method-on-boarding-dialog.js background: #242424; color: #FFFF00;
+[2025-04-01T07:49:43.205Z] Browser console: %cLoading lead-card.js background: #242424; color: #E8002A;
+[2025-04-01T07:49:43.205Z] Browser console: %cLoading lead-data-collector.js background: #242424; color: #E8002A;
+[2025-04-01T07:49:43.205Z] Browser console: %cLoading lead-profile.js background: #242424; color: #E8002A;
+[2025-04-01T07:49:43.205Z] Browser console: %cLoading lead-register.js background: #242424; color: #E8002A;
+[2025-04-01T07:49:43.205Z] Browser console: %cLoading lead-create-child-account.js background: #242424; color: #E8002A;
+[2025-04-01T07:49:43.205Z] Browser console: %cLoading lead-success.js background: #242424; color: #E8002A;
+[2025-04-01T07:49:43.206Z] Browser console: %cLoading lead-data-collector-success.js background: #242424; color: #E8002A;
+[2025-04-01T07:49:43.322Z] Browser console: %cProject version: 0cef1a62e2b7514952cee477b3592714ac37cd7d background: #242424; color: #39FF33;
+[2025-04-01T07:49:43.322Z] Browser console: %cInitializing Web Portal authentication background: #242424; color: #EC00FF;
+[2025-04-01T07:49:43.323Z] Browser console: %cSetting Web Portal configurations background: #242424; color: #EC00FF;
+[2025-04-01T07:49:44.043Z] Page loaded
+[2025-04-01T07:49:44.043Z] Waiting for content to render...
+[2025-04-01T07:49:44.256Z] Browser console: Failed to load resource: the server responded with a status of 404 ()
+[2025-04-01T07:49:44.265Z] Browser console: Failed to load resource: the server responded with a status of 404 ()
+[2025-04-01T07:49:44.760Z] Browser console: Failed to load resource: the server responded with a status of 403 ()
+[2025-04-01T07:49:44.763Z] Browser console: Failed to load resource: the server responded with a status of 403 ()
+[2025-04-01T07:49:44.825Z] Browser console: Failed to load resource: the server responded with a status of 403 ()
+[2025-04-01T07:49:44.828Z] Browser console: Failed to load resource: the server responded with a status of 403 ()
+[2025-04-01T07:49:44.838Z] Browser console: Failed to load resource: the server responded with a status of 403 ()
+[2025-04-01T07:49:44.847Z] Browser console: Failed to load resource: the server responded with a status of 403 ()
+[2025-04-01T07:49:44.900Z] Browser console: Failed to load resource: the server responded with a status of 403 ()
+[2025-04-01T07:49:54.047Z] Wait completed
+[2025-04-01T07:49:54.047Z] Scrolling page to trigger dynamic content
+[2025-04-01T07:49:59.054Z] Extracting page content
+[2025-04-01T07:49:59.070Z] Page content length: 495505 bytes
+[2025-04-01T07:49:59.071Z] Saved full page HTML
+[2025-04-01T07:49:59.071Z] Saved first 10000 bytes of page content
+[2025-04-01T07:49:59.071Z] Extracting visible text
+[2025-04-01T07:49:59.072Z] Visible text length: 612 bytes
+[2025-04-01T07:49:59.072Z] Saved visible text for debugging
+[2025-04-01T07:49:59.072Z] Taking screenshot
+[2025-04-01T07:49:59.200Z] Saved screenshot for debugging
+[2025-04-01T07:49:59.200Z] Finding keywords in visible text
+[2025-04-01T07:49:59.201Z] Found keyword: Saturday
+[2025-04-01T07:49:59.201Z] Found keyword: Sunday
+[2025-04-01T07:49:59.201Z] Found keyword: 2:30
+[2025-04-01T07:49:59.201Z] Keywords found: ["Saturday","Sunday","2:30"]
+[2025-04-01T07:49:59.201Z] Saved current keywords state
+[2025-04-01T07:49:59.201Z] New keywords: ["Saturday","Sunday","2:30"]
+[2025-04-01T07:49:59.201Z] Should notify: true
+[2025-04-01T07:49:59.202Z] New slots available! Found: Saturday, Sunday, 2:30
+[2025-04-01T07:49:59.202Z] Closing browser
+[2025-04-01T07:49:59.276Z] Browser closed
