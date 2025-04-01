@@ -17,6 +17,9 @@ on:
   
   workflow_dispatch:  # Allows manual triggering for testing
 
+permissions:
+  contents: write  # Explicitly set permission to write to repository contents
+
 jobs:
   check_website:
     runs-on: ubuntu-latest
@@ -44,6 +47,7 @@ jobs:
           import os
           import json
           import re
+          import time
           
           # URL to monitor
           url = "${{ secrets.WEBSITE_URL }}"
@@ -77,48 +81,60 @@ jobs:
                   except json.JSONDecodeError:
                       previous_keywords = []
           
-          # Get current page content
+          # Get current page content - retry up to 3 times if needed
           headers = {
               "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1"
           }
           
-          try:
-              response = requests.get(url, headers=headers)
-              response.raise_for_status()  # Raise exception for 4XX/5XX responses
-              
-              # Find keywords in current content
-              current_content = response.text
-              current_keywords = find_keywords(current_content)
-              
-              # Save current keywords state
-              with open(previous_keywords_file, "w") as f:
-                  json.dump(current_keywords, f)
-              
-              # Find newly appeared keywords (ones in current but not in previous)
-              new_keywords = [k for k in current_keywords if k not in previous_keywords]
-              
-              # Determine if we should send notification
-              should_notify = len(new_keywords) > 0
-              
-              # Create notification message
-              notification_message = "Cages updated with " + ", ".join(new_keywords) if new_keywords else ""
-              
-              # Set outputs for next steps
-              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-                  f.write(f"notify={'true' if should_notify else 'false'}\n")
-                  f.write(f"message={notification_message}\n")
-              
-              if should_notify:
-                  print(f"New slots available! Found: {', '.join(new_keywords)}")
-              else:
-                  print("No new slots detected")
+          max_retries = 3
+          retry_delay = 30  # seconds
+          
+          for attempt in range(max_retries):
+              try:
+                  response = requests.get(url, headers=headers)
+                  response.raise_for_status()  # Raise exception for 4XX/5XX responses
                   
-          except Exception as e:
-              print(f"Error checking website: {str(e)}")
-              # Don't update previous_keywords if there was an error
-              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-                  f.write("notify=false\n")
-                  f.write("message=Error checking website\n")
+                  # Find keywords in current content
+                  current_content = response.text
+                  current_keywords = find_keywords(current_content)
+                  
+                  # Save current keywords state
+                  with open(previous_keywords_file, "w") as f:
+                      json.dump(current_keywords, f)
+                  
+                  # Find newly appeared keywords (ones in current but not in previous)
+                  new_keywords = [k for k in current_keywords if k not in previous_keywords]
+                  
+                  # Determine if we should send notification
+                  should_notify = len(new_keywords) > 0
+                  
+                  # Create notification message
+                  notification_message = "Cages updated with " + ", ".join(new_keywords) if new_keywords else ""
+                  
+                  # Set outputs for next steps
+                  with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                      f.write(f"notify={'true' if should_notify else 'false'}\n")
+                      f.write(f"message={notification_message}\n")
+                  
+                  if should_notify:
+                      print(f"New slots available! Found: {', '.join(new_keywords)}")
+                  else:
+                      print("No new slots detected")
+                  
+                  # If we got here, we succeeded, so break out of retry loop
+                  break
+                      
+              except Exception as e:
+                  print(f"Error checking website (attempt {attempt+1}/{max_retries}): {str(e)}")
+                  if attempt < max_retries - 1:
+                      print(f"Waiting {retry_delay} seconds before retrying...")
+                      time.sleep(retry_delay)
+                  else:
+                      # All retries failed
+                      print("All attempts failed. Not updating previous_keywords.")
+                      with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                          f.write("notify=false\n")
+                          f.write("message=Error checking website\n")
           EOF
 
       - name: Send notification
