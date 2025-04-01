@@ -38,11 +38,10 @@ jobs:
         run: |
           npm init -y
           npm install puppeteer
-
-      - name: Check website for specific keywords
-        id: check
+          
+      - name: Create script file
         run: |
-          node - <<EOF
+          cat > check_website.js << 'ENDSCRIPT'
           const fs = require('fs');
           const path = require('path');
           const puppeteer = require('puppeteer');
@@ -111,7 +110,7 @@ jobs:
               
               // Navigate to the website
               console.log('Navigating to the website...');
-              await page.goto('${process.env.WEBSITE_URL}', {
+              await page.goto(process.env.WEBSITE_URL, {
                 waitUntil: 'networkidle2', // Wait until network is idle
                 timeout: 60000 // 60 seconds timeout
               });
@@ -178,7 +177,14 @@ jobs:
           
           // Run the check
           checkWebsite();
-          EOF
+          ENDSCRIPT
+
+      - name: Check website for specific keywords
+        id: check
+        env:
+          WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
+        run: |
+          node check_website.js
 
       - name: Send notification
         if: steps.check.outputs.notify == 'true'
