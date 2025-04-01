@@ -37,7 +37,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm init -y
-          npm install puppeteer@19.7.5
+          npm install puppeteer
           
       - name: Create script file
         run: |
@@ -119,7 +119,7 @@ jobs:
             // Launch browser with stealth mode
             logDebug('Launching browser');
             const browser = await puppeteer.launch({
-              headless: true,
+              headless: 'new',
               args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
