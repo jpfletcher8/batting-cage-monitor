@@ -37,7 +37,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests
+          pip install requests beautifulsoup4
 
       - name: Check website for specific keywords
         id: check
@@ -48,6 +48,7 @@ jobs:
           import json
           import re
           import time
+          from bs4 import BeautifulSoup
           
           # URL to monitor
           url = "${{ secrets.WEBSITE_URL }}"
@@ -65,10 +66,43 @@ jobs:
           # Function to extract which keywords are present in the content
           def find_keywords(content):
               found = []
+              
+              # Parse HTML with BeautifulSoup
+              soup = BeautifulSoup(content, 'html.parser')
+              
+              # Extract visible text
+              text = soup.get_text()
+              
+              # Look for the specific structure based on the HTML provided
               for keyword in keywords:
-                  if re.search(r'\b' + re.escape(keyword) + r'\b', content):
+                  # Check for generic matches in the text
+                  if re.search(r'\b' + re.escape(keyword) + r'\b', text):
                       found.append(keyword)
-              return found
+                  
+                  # Special handling for days of the week in the Angular structure
+                  if keyword in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]:
+                      # Look for day names in the specific format used in the HTML
+                      days = soup.find_all('b', class_='ng-binding')
+                      for day in days:
+                          day_text = day.get_text().strip()
+                          if keyword in day_text:
+                              found.append(keyword)
+                              break
+                  
+                  # Special handling for times like 2:30
+                  if re.match(r'\d+:\d+', keyword):
+                      # Look for times in the list-title elements
+                      times = soup.find_all('div', class_='list-title ng-binding')
+                      for time in times:
+                          time_text = time.get_text().strip()
+                          # Need to account for am/pm format
+                          time_match = re.search(r'(\d+:\d+)', time_text)
+                          if time_match and time_match.group(1) == keyword:
+                              found.append(keyword)
+                              break
+              
+              # Remove duplicates
+              return list(set(found))
           
           # Get previous keywords state
           previous_keywords_file = "data/previous_keywords.json"
@@ -87,16 +121,27 @@ jobs:
           }
           
           max_retries = 3
-          retry_delay = 30  # seconds
+          retry_delay = 5  # seconds
           
           for attempt in range(max_retries):
               try:
+                  print(f"Attempt {attempt+1}: Fetching URL {url}")
                   response = requests.get(url, headers=headers)
                   response.raise_for_status()  # Raise exception for 4XX/5XX responses
                   
                   # Find keywords in current content
                   current_content = response.text
+                  print(f"Page content retrieved, size: {len(current_content)} bytes")
+                  
+                  # Save a sample of the content for debugging
+                  with open("data/page_sample.txt", "w") as f:
+                      sample_size = min(5000, len(current_content))
+                      f.write(current_content[:sample_size])
+                  print(f"Saved first {sample_size} bytes of page content to data/page_sample.txt")
+                  
+                  # Find keywords
                   current_keywords = find_keywords(current_content)
+                  print(f"Keywords found: {current_keywords}")
                   
                   # Save current keywords state
                   with open(previous_keywords_file, "w") as f:
@@ -155,6 +200,6 @@ jobs:
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
-          git add data/previous_keywords.json
-          git commit -m "Update keywords state" || echo "No changes to commit"
+          git add data/
+          git commit -m "Update keywords state and add page sample" || echo "No changes to commit"
           git push
